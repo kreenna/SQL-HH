@@ -1,5 +1,4 @@
 from config import config
-from src.utils import create_database, get_youtube_data, save_data_to_database
 
 
 def main():
@@ -18,10 +17,44 @@ def main():
     ]
     params = config()
 
-    data = get_youtube_data(employer_ids)
-    create_database("Employers", params)
-    save_data_to_database(data, "Employers", params)
+    # data = get_youtube_data(employer_ids)
+    # create_database("Employers", params)
+    # save_data_to_database(data, "Employers", params)
 
+    while True:  # запускаем цикл работы с вакансиями
+        user_option = input(
+            """Какую информацию вы желаете получить?
+1 - список всех компаний и количества вакансий от них;
+2 - список всех вакансий и данных о них;
+3 - средняя зарплата по всем вакансиям;
+4 - список вакансий, у которых зарплата выше средней;
+5 - вакансии по ключевому слову.
+(Введите цифру от 1 до 5)\n"""
+        )
+
+        if user_option == "1":  # проверяем каждый вариант
+            pass
+
+        elif user_option == "2":  # проверяем каждый вариант
+            pass
+
+        elif user_option == "3":  # проверяем каждый вариант
+            pass
+
+        elif user_option == "4":  # проверяем каждый вариант
+            pass
+
+        elif user_option == "5":  # проверяем каждый вариант
+            pass
+
+        else:   # если ввод пользователя некорректный
+            print("К сожалению, такого варианта не существует.")
+            continue
+
+        finish_option: str = input("Желаете завершить работу с вакансиями? (да/нет)\n")
+
+        if finish_option == "да":   # завершаем работу, если ответ положительный
+            break
 
 if __name__ == "__main__":
     main()
