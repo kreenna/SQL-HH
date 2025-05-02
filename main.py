@@ -1,25 +1,19 @@
 from config import config
 
+from src.hh_api import HeadHunterAPI
+from src.utils import create_database, save_data_to_database
 
 def main():
     """Основная функция для взаимодействия с пользователем."""
-    employer_ids = [
-        "7944",
-        "10545773",
-        "78989",
-        "14208",
-        "3986000",
-        "10337252",
-        "2848751",
-        "4786273",
-        "9426910",
-        "87021",
-    ]
-    params = config()
 
-    # data = get_youtube_data(employer_ids)
-    # create_database("Employers", params)
-    # save_data_to_database(data, "Employers", params)
+    parameters: dict = config()
+    # автоматически создаем базу данных
+    create_database("headhunter", parameters)
+
+    hh_api: HeadHunterAPI = HeadHunterAPI() # создаем экземпляр класса
+    vacancies_data: list = hh_api.get_api_response()
+    # автоматически добавляем вакансии и компании в базу данных
+    save_data_to_database(vacancies_data, "headhunter", parameters)
 
     while True:  # запускаем цикл работы с вакансиями
         user_option = input(
@@ -45,7 +39,8 @@ def main():
             pass
 
         elif user_option == "5":  # проверяем каждый вариант
-            pass
+            keyword: str = input("Введите ключевое слова для поиска:\n")
+
 
         else:   # если ввод пользователя некорректный
             print("К сожалению, такого варианта не существует.")
