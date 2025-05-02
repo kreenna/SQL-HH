@@ -68,5 +68,6 @@ class DBManager:
                 SELECT Employers.employer_name, vacancy_name, salary, vacancy_url
                 FROM Vacancies JOIN Employers USING(employer_id)
                 WHERE vacancy_name LIKE '%{keyword}%'
+                ORDER BY Employers.employer_name, salary DESC
                 """
         self.cur.execute(query)
