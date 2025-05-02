@@ -20,7 +20,7 @@ def create_database(database_name: str, params: dict) -> None:
         cur.execute(
             """
                 CREATE TABLE Employers (employer_id SERIAL PRIMARY KEY,
-                    name VARCHAR(255) NOT NULL,
+                    employer_name VARCHAR(255) NOT NULL,
                     url TEXT,
                     vacancies_url TEXT,
                     trusted BOOLEAN
@@ -34,8 +34,8 @@ def create_database(database_name: str, params: dict) -> None:
                 CREATE TABLE Vacancies (
                     vacancy_id SERIAL PRIMARY KEY,
                     employer_id INT REFERENCES Employers(employer_id),
-                    name VARCHAR NOT NULL,
-                    salary VARCHAR NOT NULL,
+                    vacancy_name VARCHAR NOT NULL,
+                    salary REAL NOT NULL,
                     vacancy_url TEXT,
                     requirements TEXT,
                     responsibilities TEXT
@@ -57,7 +57,7 @@ def save_data_to_database(data: list, database_name: str, params: dict) -> None:
             employer_data: dict = vacancy["employer"]
             cur.execute(
                 """
-                INSERT INTO Employers (name, url, vacancies_url, trusted)
+                INSERT INTO Employers (employer_name, url, vacancies_url, trusted)
                 VALUES (%s, %s, %s, %s)
                 RETURNING employer_id;
                 """,
@@ -73,14 +73,14 @@ def save_data_to_database(data: list, database_name: str, params: dict) -> None:
             # приводим зарплату к нужному формату
             salary_from: int = vacancy_salary["from"] if vacancy_salary["from"] else 0
             salary_to: int = vacancy_salary["to"] if vacancy_salary["to"] else 0
-            currency: str = "RUB" if vacancy_salary["currency"] == "RUR" else vacancy_salary["currency"]
-            salary: str = f"{salary_from}-{salary_to} {currency}"
+            salary: float = (salary_to if salary_to else salary_from + salary_from if salary_from else salary_to) / 2
 
             employer_id: int = cur.fetchone()[0]
             vacancy_data: dict = vacancy["snippet"]
             cur.execute(
                 """
-                    INSERT INTO Vacancies (employer_id, name, salary, vacancy_url, requirements, responsibilities)
+                    INSERT INTO Vacancies (employer_id, vacancy_name, salary, vacancy_url, requirements,
+                    responsibilities)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                 (
