@@ -36,11 +36,15 @@ class HeadHunterAPI(Parser):
     def get_api_response(self) -> list:
         """Метод для получения ответа от API-сервиса."""
 
-        while self.__params.get("page") != 20:  # проверяем, что количество страниц не выше 20
-            response = requests.get(self.url, headers=self.__headers, params=self.__params)
+        try:
+            while self.__params.get("page") != 20:  # проверяем, что количество страниц не выше 20
+                response = requests.get(self.url, headers=self.__headers, params=self.__params)
 
-            vacancies = response.json()["items"]
-            self.vacancies.extend(vacancies)
-            self.__params["page"] += 1
+                vacancies = response.json()["items"]
+                self.vacancies.extend(vacancies)
+                self.__params["page"] += 1
 
-        return self.vacancies
+                return self.vacancies
+
+        except Exception:
+            return []

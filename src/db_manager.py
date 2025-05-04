@@ -64,10 +64,10 @@ class DBManager:
 
     def get_vacancies_with_keyword(self, keyword: str) -> None:
         """Метод для получения всех вакансий, в названии которых содержатся переданные в метод слова."""
-        query = f"""
+        query = """
                 SELECT Employers.employer_name, vacancy_name, salary, vacancy_url
                 FROM Vacancies JOIN Employers USING(employer_id)
-                WHERE vacancy_name LIKE '%{keyword}%'
+                WHERE vacancy_name LIKE %s
                 ORDER BY Employers.employer_name, salary DESC
                 """
-        self.cur.execute(query)
+        self.cur.execute(query, (f"%{keyword}%",))
