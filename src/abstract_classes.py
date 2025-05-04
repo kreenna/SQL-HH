@@ -1,13 +1,15 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Parser(ABC):
     """Абстрактный метод для классов с API."""
 
-    def init(self) -> None:
+    @abstractmethod
+    def __init__(self) -> None:
         """Абстрактный метод для инициализации данных класса и API-сервиса."""
         pass
 
-    def get_api_response(self) -> str:
+    @abstractmethod
+    def get_api_response(self) -> list:
         """Абстрактный метод для получения ответа от API-сервиса."""
         pass
